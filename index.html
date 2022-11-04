@@ -1,14 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
 </head>
-<body>
+
+<body class="text-light">
+    <div class="container-fluid">
+
+        <!-- create header -->
+        
+        <div class="row bg-primary">
+            <div class="col text-right">
+                <h1>Weather Dashboard</h1>
+            </div>
+        </div>
+
+        <!-- create dashboard -->
+
+        <div class="row">
+            <div class="col-3 bg-warning pb-2 pt-3 vh-100" id="searchResults">
+                <div class="row">
+                    <div class="col-12">
+                        <h2>Search a City!</h2>
+                        <input class="form-control" type="text" id="enterCity" placeholder="Enter a city!">
+                        <button type="button" id="searchBtn" class="btn btn-secondary btn-lg">Search</button>
+                        <ul id="history" class="list-group">
+                            <!-- append li here li class="list-group-item"-->
+                        </ul>
     
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div id="weatherDisplay" class="col-9 pb-4 pt-4">
+                    <div class="row pb-3 mr-2 ml-2">
+                        <div id="city" class="col-12 border rounded px-3 py-3"> 
+                        </div>
+                    </div>
+
+                    <div class="row pb-2 pt-1">
+                        <div class="col-12 ml-2">
+                            <h3 class="text-primary">5-Day Forecast:</h3>
+                        </div>
+                    </div>
+
+                    <div id="fiveDayForcast" class="row pl-2">
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 
@@ -28,7 +76,11 @@
 
 
 
+
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
-    
+    <script src="./assets/script.js"></script>
 </body>
+
 </html>
