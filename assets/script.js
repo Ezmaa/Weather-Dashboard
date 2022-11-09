@@ -3,9 +3,9 @@ let userInput = document.getElementById('userInput');
 const weatherDisplay = document.getElementById('weatherDisplay');
 const fiveDayForecast = document.getElementById('fiveDayForecast');
 const searchHistory = document.getElementById('searchHistory');
+const cityWeather = document.getElementById('cityWeather');
 
-const lat = 42.7654;
-const lon = 71.4676;
+
 const today = dayjs().format('L LT');
 let city = "";
 const apiKey = '8c6afd615baf70a3f5611f6679bd0674';
@@ -13,52 +13,63 @@ const apiKey = '8c6afd615baf70a3f5611f6679bd0674';
 
 
 
-
-let citySearch = function (event) {
-    event.preventDefault();
+// User eneters name of city and gets the coordinates for that city 
+let citySearch = function () {
+    
 
     let city = userInput.value.trim();
 
     let apiUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&appid=${apiKey}`;
 
     fetch(apiUrl)
-    .then(function (response){
-        return response.json();
+    .then(function (coordinateResponse){
+        return coordinateResponse.json();
 })
-    .then(function (data) {
-        console.log('Users input: \n---------');
-        console.log(data)
+    .then(function (coordinatedata) {
+
+        const lon = coordinatedata[0].lon;
+        const lat = coordinatedata[0].lat;
+
+        getCityWeather(lat, lon); 
     });
-
-
-
-    if (userInput) {
-        currentCity(userInput);
-    }
-
 
 
 };
 
+// city coordinates are read here and weather is displayed 
+function getCityWeather(lat, lon) {
 
-function currentCity() {
-
-    let lat = 
-    let lon =
-
-    let latUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}`;
+    const latUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}`;
 
     fetch(latUrl)
     .then(function (response){
         return response.json();
 })
-    .then(function (data) {
-        console.log('Users input: \n---------');
-        console.log(data)
+    .then(function (weatherData) {
+        console.log('city: \n---------');
+        console.log(weatherData);
     });
+
+    cityWeather.append(weatherData.list[0]);
+
 };
 
 
 
 
-searchBtn.addEventListener('click', citySearch);
+
+
+
+searchBtn.addEventListener('click', function() {
+
+
+    if (userInput === "") {
+        alert("Please enter a city")
+    } else {
+        localStorage.setItem('City', userInput.value);
+    }
+
+
+
+    citySearch();
+});
