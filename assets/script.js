@@ -3,12 +3,13 @@ let userInput = document.getElementById('userInput');
 const weatherDisplay = document.getElementById('weatherDisplay');
 const fiveDayForecast = document.getElementById('fiveDayForecast');
 const searchHistory = document.getElementById('searchHistory');
-const cityWeather = document.getElementById('cityWeather');
+const cityWeather = document.createElement('cityWeather');
 
 
 const today = dayjs().format('L LT');
 let city = "";
 const apiKey = '8c6afd615baf70a3f5611f6679bd0674';
+let weatherArr = [];
 // button function to search for city 
 
 
@@ -48,14 +49,31 @@ function getCityWeather(lat, lon) {
     .then(function (weatherData) {
         console.log('city: \n---------');
         console.log(weatherData);
+
+        displayCityWeather(weatherData);
     });
 
-    cityWeather.append(weatherData.list[0]);
+  
+    
+    // cityWeather.append(weatherData.list[0].weather);
 
 };
 
 
+function displayCityWeather(weatherData) {
 
+    let weatherArr = weatherData.list;
+        console.log(weatherArr);
+
+        const todaysWeather = weatherArr[0]
+        console.log(todaysWeather);
+
+        for(i=1; i<6; i++) {
+            console.log(weatherArr[i]);
+        }
+
+        // cityWeather.append(weatherData.list[0].weather);
+};
 
 
 
@@ -63,7 +81,7 @@ function getCityWeather(lat, lon) {
 searchBtn.addEventListener('click', function() {
 
 
-    if (userInput === "") {
+    if (userInput.value === "") {
         alert("Please enter a city")
     } else {
         localStorage.setItem('City', userInput.value);
