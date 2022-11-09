@@ -3,7 +3,7 @@ let userInput = document.getElementById('userInput');
 const weatherDisplay = document.getElementById('weatherDisplay');
 const fiveDayForecast = document.getElementById('fiveDayForecast');
 const searchHistory = document.getElementById('searchHistory');
-const cityWeather = document.createElement('cityWeather');
+const cityWeather = document.getElementById('cityWeather');
 
 
 const today = dayjs().format('L LT');
@@ -71,8 +71,15 @@ function displayCityWeather(weatherData) {
         for(i=1; i<6; i++) {
             console.log(weatherArr[i]);
         }
+        const description = weatherData.list[0].weather[0].description;
+        cityWeather.append(`description: ${description}`);
+        const temp = weatherData.list[0].main.temp;
+        const wind = weatherData.list[0].wind.gust;
+        const humidity = weatherData.list[0].main.humidity;
 
-        // cityWeather.append(weatherData.list[0].weather);
+        console.log(temp);
+        console.log(wind);
+        console.log(humidity );
 };
 
 
