@@ -6,58 +6,90 @@ const searchHistory = document.getElementById('searchHistory');
 const cityWeather = document.getElementById('cityWeather');
 
 
-const today = dayjs().format('MM-DD-YYYY');
-let city = "";
-const apiKey = '8c6afd615baf70a3f5611f6679bd0674';
-let weatherArr = [];
+// const today = dayjs().format('MM-DD-YYYY');
+// let city = "";
+// const apiKey = '8c6afd615baf70a3f5611f6679bd0674';
+// let weatherArr = [];
 // button function to search for city 
 
-
+const apiKey = "8c6afd615baf70a3f5611f6679bd0674";
+const today = moment().format('L');
+let weatherArr = [];
 
 // User eneters name of city and gets the coordinates for that city 
-let citySearch = function () {
+function currentCondition(city) {
 
+    const queryURL = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=imperial&appid=${apiKey}`;
 
-    let city = userInput.value.trim();
+    $.ajax({
+        url: queryURL,
+        method: "GET"
+    }).then(function(cityWeatherResponse) {
+        console.log(cityWeatherResponse);
+        
+        $("#weatherContent").css("display", "block");
+        $("#cityDetail").empty();
+        
+        const iconCode = cityWeatherResponse.weather[0].icon;
+        const iconURL = `https://openweathermap.org/img/w/${iconCode}.png`;
 
-    let apiUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&appid=${apiKey}`;
+        // WHEN I view current weather conditions for that city
+        // THEN I am presented with the city name
+        // the date
+        // an icon representation of weather conditions
+        // the temperature
+        // the humidity
+        // the wind speed
+        const currentCity = $(`
+            <h2 id="currentCity">
+                ${cityWeatherResponse.name} ${today} <img src="${iconURL}" alt="${cityWeatherResponse.weather[0].description}" />
+            </h2>
+            <p>Temperature: ${cityWeatherResponse.main.temp} °F</p>
+            <p>Humidity: ${cityWeatherResponse.main.humidity}\%</p>
+            <p>Wind Speed: ${cityWeatherResponse.wind.speed} MPH</p>
+        `);
 
-    fetch(apiUrl)
-        .then(function (coordinateResponse) {
-            return coordinateResponse.json();
-        })
-        .then(function (coordinatedata) {
+        $("#cityDetail").append(currentCity);
 
-            const lon = coordinatedata[0].lon;
-            const lat = coordinatedata[0].lat;
+        // UV index
+        const lat = cityWeatherResponse.coord.lat;
+        const lon = cityWeatherResponse.coord.lon;
+        const uviQueryURL = `https://api.openweathermap.org/data/2.5/uvi?lat=${lat}&lon=${lon}&appid=${apiKey}`;
 
-            getCityWeather(lat, lon);
+        $.ajax({
+            url: uviQueryURL,
+            method: "GET"
+        }).then(function(uviResponse) {
+            console.log(uviResponse);
+
+            const uvIndex = uviResponse.value;
+            const uvIndexP = $(`
+                <p>UV Index: 
+                    <span id="uvIndexColor" class="px-2 py-2 rounded">${uvIndex}</span>
+                </p>
+            `);
+
+            $("#cityDetail").append(uvIndexP);
+
+            futureCondition(lat, lon);
+
+            // WHEN I view the UV index
+            // THEN I am presented with a color that indicates whether the conditions are favorable, moderate, or severe
+            // 0-2 green#3EA72D, 3-5 yellow#FFF300, 6-7 orange#F18B00, 8-10 red#E53210, 11+violet#B567A4
+            if (uvIndex >= 0 && uvIndex <= 2) {
+                $("#uvIndexColor").css("background-color", "#3EA72D").css("color", "white");
+            } else if (uvIndex >= 3 && uvIndex <= 5) {
+                $("#uvIndexColor").css("background-color", "#FFF300");
+            } else if (uvIndex >= 6 && uvIndex <= 7) {
+                $("#uvIndexColor").css("background-color", "#F18B00");
+            } else if (uvIndex >= 8 && uvIndex <= 10) {
+                $("#uvIndexColor").css("background-color", "#E53210").css("color", "white");
+            } else {
+                $("#uvIndexColor").css("background-color", "#B567A4").css("color", "white"); 
+            };  
         });
-
-
-};
-
-// city coordinates are read here and weather is displayed 
-function getCityWeather(lat, lon) {
-
-    const latUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}`;
-
-    fetch(latUrl)
-        .then(function (response) {
-            return response.json();
-        })
-        .then(function (weatherData) {
-            console.log('city: \n---------');
-            console.log(weatherData);
-
-            displayCityWeather(weatherData);
-        });
-
-
-
-    // cityWeather.append(weatherData.list[0].weather);
-
-};
+    });
+}
 
 
 function displayCityWeather(weatherData) {
@@ -114,7 +146,7 @@ function displayCityWeather(weatherData) {
 
 
     //display weather icon
-    // var iconPic = document.createElement("img").attributes;
+    // const iconPic = document.createElement("img").attributes;
     //         "src"
     //         "https://openweathermap.org/img/wn/" + icon + "@2x.png")
 
