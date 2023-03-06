@@ -68,12 +68,27 @@ function displayCityWeather(weatherData) {
     const todaysWeather = weatherArr[0]
     console.log(todaysWeather);
 
+    let i = 0;
     for (i = 1; i < 6; i++) {
+
+        let cityInfo = {
+            temp5: (Math.round((weatherArr[i].main.temp) - 273.15) * 9 / 5 + 32),
+            wind5: weatherArr[i].wind.speed,
+            humidity5: weatherArr[i].main.humidity,
+            icon5: weatherArr[i].weather[0].icon,
+        
+        };
+
+        
+        console.log(cityInfo.temp5);
+        console.log(cityInfo);
         console.log(weatherArr[i]);
+
+
     }
     // const description = weatherData.list[0].weather[0].description;
     // cityWeather.append(`description: ${description}`);
-    const temp = (Math.round(weatherData.list[0].main.temp - 273.15) * 9/5 + 32);
+    const temp = (Math.round(weatherData.list[0].main.temp - 273.15) * 9 / 5 + 32);
     const wind = weatherData.list[0].wind.speed;
     const humidity = weatherData.list[0].main.humidity;
     const icon = weatherData.list[0].weather[0].icon;
@@ -102,9 +117,11 @@ function displayCityWeather(weatherData) {
     // var iconPic = document.createElement("img").attributes;
     //         "src"
     //         "https://openweathermap.org/img/wn/" + icon + "@2x.png")
-        
+
     // cityWeather.append(iconPic);
 
+
+    // Todays forecast 
     let cityTemp = document.createElement("h3");
     cityTemp.textContent = ("Temp: " + temp + " °F");
     cityWeather.append(cityTemp);
@@ -114,39 +131,32 @@ function displayCityWeather(weatherData) {
     cityWeather.append(cityWind);
 
     let cityHumidity = document.createElement("h3");
-    cityHumidity.textContent = ("Humidity: " + humidity);
+    cityHumidity.textContent = ("Humidity: " + humidity + " %");
     cityWeather.append(cityHumidity);
 
     localStorage.setItem("City", cityInput);
 
-    // const weathercard = 
 
-    for (i = 1; i < 6; i++) {
-        console.log(weatherArr[i]);
-    }
+    // Five day forecast 
+    let cityTemp5 = document.createElement("h3");
+    cityInfo.temp5.value = ("Temp: " + temp + " °F");
+    fiveDayForecast.append(cityTemp5);
+
+    let cityWind5 = document.createElement("h3");
+    cityInfo.wind5.value = ("Wind " + wind + " mph");
+    fiveDayForecast.append(cityWind5);
+
+    let cityHumidity5 = document.createElement("h3");
+    cityInfo.humidity5.value = ("Humidity: " + humidity + " %");
+    fiveDayForecast.append(cityHumidity5);
+
+
 
     console.log(temp);
     console.log(wind);
     console.log(humidity);
     console.log(icon);
 };
-
-
-
-    
-
-// function savedSearches() {
-//     let searched = localStorage.getItem("city");
-
-//     if (searched === "") {
-//         userInput.value = "";
-//     } else {
-//         userInput.value = searched;
-//     }
-
-//     searchHistory.textContent = userInput.value;
-
-// }
 
 
 
