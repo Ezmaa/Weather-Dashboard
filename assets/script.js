@@ -1,4 +1,4 @@
-const apiKey = "8c6afd615baf70a3f5611f6679bd0674";
+const apiKey = "d1e2d0763204896fd894698f5c6e27ee";
 const today = moment().format('L');
 let weatherArr = [];
 
